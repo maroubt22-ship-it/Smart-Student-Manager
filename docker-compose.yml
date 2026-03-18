@@ -1,0 +1,89 @@
+# ============================================
+# Docker Compose Configuration for MySQL + Flask
+# Connects Flask app to existing MySQL container
+# ============================================
+
+version: '3.8'
+
+services:
+  # ============================================
+  # Flask Web Application Service
+  # ============================================
+  web:
+    # Build Docker image from Dockerfile in current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Container name for easy reference in logs and debugging
+    container_name: smart-student-manager
+
+    # Port mapping format: "host_port:container_port"
+    # This allows accessing Flask app at http://localhost:5000
+    ports:
+      - "5000:5000"
+    
+    # Volume mounts for development and data persistence
+    volumes:
+      # Mount current directory for live code reload during development
+      - .:/app
+    
+    # ============================================
+    # Environment Variables
+    # Database connection configuration
+    # ============================================
+    environment:
+      # MySQL Connection Settings
+      # These connect to your existing MySQL container
+      - DB_USER=root
+      - DB_PASSWORD=root123
+      - DB_HOST=host.docker.internal      # Use this to connect to host MySQL
+      - DB_PORT=3306                      # Default MySQL port
+      - DB_NAME=smart_student_db
+      
+      # Flask Configuration
+      - FLASK_ENV=development              # Development mode with auto-reload
+      - FLASK_APP=app.py
+      - PYTHONUNBUFFERED=1                 # Unbuffered output (see logs immediately)
+    
+    # Keep container running even if process exits
+    stdin_open: true
+    tty: true
+    
+    # Restart policy
+    # Unless-stopped: restart unless explicitly stopped by user
+    restart: unless-stopped
+    
+    # Health check configuration
+    # Periodically tests if the application is responsive
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s                        # Check every 30 seconds
+      timeout: 10s                         # Wait max 10 seconds for response
+      retries: 3                           # Fail after 3 failures
+      start_period: 10s                    # Wait 10s before first check
+
+# ============================================
+# Configuration Notes
+# ============================================
+#
+# IMPORTANT: MySQL Container Setup
+# 
+# This docker-compose.yml expects your MySQL container to be running:
+# - Container name: mysqlTaoufiq
+# - Username: root
+# - Password: root123
+# - Host: The MySQL container on your Docker host
+#
+# The Flask container uses "host.docker.internal" to connect to MySQL
+# on the Docker host (works on Windows and Mac)
+#
+# If MySQL is in a different Docker network:
+# 1. Create a network: docker network create app-network
+# 2. Connect MySQL: docker network connect app-network mysqlTaoufiq
+# 3. Change DB_HOST to: mysqlTaoufiq (container name for direct network access)
+#
+# If MySQL is on a remote server:
+# Change DB_HOST to your server IP address or hostname
+#
+

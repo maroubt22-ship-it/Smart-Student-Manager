@@ -1,0 +1,119 @@
+# ============================================
+# Docker Compose - PostgreSQL Version
+# Use this for production deployment
+# ============================================
+
+version: '3.8'
+
+services:
+  # ============================================
+  # PostgreSQL Database Service
+  # ============================================
+  db:
+    image: postgres:15-alpine
+    container_name: smart-student-manager-db
+    
+    # Environment variables
+    environment:
+      - POSTGRES_USER=student_user
+      - POSTGRES_PASSWORD=secure_password_123
+      - POSTGRES_DB=smart_student_db
+      - POSTGRES_INITDB_ARGS=-c shared_buffers=256MB -c max_connections=200
+    
+    # Ports (only expose if direct database access needed)
+    ports:
+      - "5432:5432"
+    
+    # Volumes for data persistence
+    volumes:
+      # Database data persists across restarts
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: Initialize database with SQL script
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U student_user -d smart_student_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ============================================
+  # Flask Web Application Service
+  # ============================================
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: smart-student-manager
+    
+    # Port mapping
+    ports:
+      - "5000:5000"
+    
+    # Volumes
+    volumes:
+      # Code volume for live reload during development
+      - .:/app
+    
+    # Environment variables
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=app.py
+      # PostgreSQL connection string
+      - DATABASE_URL=postgresql://student_user:secure_password_123@db:5432/smart_student_db
+    
+    # Dependencies
+    depends_on:
+      db:
+        condition: service_healthy
+    
+    # Port and TTY
+    stdin_open: true
+    tty: true
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# ============================================
+# Named Volumes
+# ============================================
+volumes:
+  # PostgreSQL data persistence
+  postgres_data:
+    driver: local
+
+# ============================================
+# Networks
+# ============================================
+networks:
+  default:
+    name: smart-student-network
+    driver: bridge

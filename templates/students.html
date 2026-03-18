@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Students - Smart Student Manager{% endblock %}
+
+{% block content %}
+<div class="students-container">
+    <div class="students-header">
+        <h1>All Students</h1>
+        <a href="{{ url_for('add_student_page') }}" class="btn btn-primary">+ Add New Student</a>
+    </div>
+
+    <!-- Empty State -->
+    {% if not students %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h2>No Students Yet</h2>
+        <p>There are no students in the system yet.</p>
+        <a href="{{ url_for('add_student_page') }}" class="btn btn-primary btn-large">Add Your First Student</a>
+    </div>
+
+    <!-- Students Table -->
+    {% else %}
+    <div class="table-wrapper">
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th class="col-id">#</th>
+                    <th class="col-name">Student Name</th>
+                    <th class="col-age">Age</th>
+                    <th class="col-field">Field of Study</th>
+                    <th class="col-date">Added On</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr class="student-row">
+                    <td class="col-id">{{ student.id }}</td>
+                    <td class="col-name">{{ student.name }}</td>
+                    <td class="col-age">{{ student.age }} years</td>
+                    <td class="col-field">{{ student.field_of_study }}</td>
+                    <td class="col-date">
+                        {% if student.created_at %}
+                            {{ student.created_at.split(' ')[0] }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td class="col-actions">
+                        <form method="POST" action="{{ url_for('delete_student', student_id=student.id) }}" class="delete-form" onsubmit="return confirm('Are you sure you want to delete {{ student.name }}?');">
+                            <button type="submit" class="btn btn-danger btn-small">🗑️ Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Statistics -->
+    <div class="statistics">
+        <div class="stat-item">
+            <span class="stat-label">Total Students:</span>
+            <span class="stat-value">{{ students|length }}</span>
+        </div>
+        {% if students %}
+            <div class="stat-item">
+                <span class="stat-label">Average Age:</span>
+                <span class="stat-value">
+                    {% set total_age = students|map(attribute='age')|sum %}
+                    {% set avg_age = (total_age / students|length)|round(1) %}
+                    {{ avg_age }} years
+                </span>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

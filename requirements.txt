@@ -1,0 +1,34 @@
+# ============================================
+# Smart Student Manager - Python Dependencies
+# Flask Web Framework with MySQL Support
+# ============================================
+
+# Core Flask Framework
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Database ORM and Drivers
+SQLAlchemy==2.0.25          # SQL toolkit and ORM (compatible with Python 3.11)
+PyMySQL==1.1.0              # Pure Python MySQL driver
+cryptography>=42.0.0        # Encryption support for PyMySQL
+
+# Flask Dependencies
+Jinja2>=3.1.2
+itsdangerous>=2.1.2
+click>=8.1.3
+blinker>=1.6.2
+MarkupSafe>=2.1.1
+
+# Environment Configuration
+python-dotenv==1.0.0        # Load environment variables from .env
+
+# Additional utilities
+colorama>=0.4.6             # Colored terminal output
+requests>=2.31.0            # HTTP requests library
+
+# Production WSGI Server (optional, uncomment for production)
+# gunicorn==20.1.0           # Production WSGI server
+
+# Development/Debugging (optional, uncomment for development)
+# flask-sqlalchemy==3.1.1    # Flask extension for SQLAlchemy
+

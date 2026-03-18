@@ -1,0 +1,56 @@
+# ============================================
+# Docker Ignore File
+# Files and directories to exclude from Docker build context
+# ============================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+.venv
+venv/
+.env
+.env.local
+
+# IDE and Editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov/
+
+# Documentation
+*.md
+docs/
+README.md
+
+# Database (don't include existing database in image)
+# database.db will be created fresh in container
+
+# Docker files (no need to copy into build)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Other
+*.log
+.tmp
+dist/
+build/
+*.egg-info/

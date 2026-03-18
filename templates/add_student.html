@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Add Student - Smart Student Manager{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <h1 class="form-title">Add New Student</h1>
+        <p class="form-subtitle">Fill in the details below to add a new student to the system</p>
+
+        <!-- Add Student Form -->
+        <form method="POST" action="{{ url_for('add_student') }}" class="student-form">
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name" class="form-label">Student Name *</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    class="form-input" 
+                    placeholder="Enter student's full name"
+                    required
+                    minlength="2"
+                    maxlength="100"
+                >
+                <small class="form-help">Minimum 2 characters required</small>
+            </div>
+
+            <!-- Age Field -->
+            <div class="form-group">
+                <label for="age" class="form-label">Age *</label>
+                <input 
+                    type="number" 
+                    id="age" 
+                    name="age" 
+                    class="form-input" 
+                    placeholder="Enter age (5-100)"
+                    required
+                    min="5"
+                    max="100"
+                >
+                <small class="form-help">Age must be between 5 and 100</small>
+            </div>
+
+            <!-- Field of Study -->
+            <div class="form-group">
+                <label for="field_of_study" class="form-label">Field of Study *</label>
+                <input 
+                    type="text" 
+                    id="field_of_study" 
+                    name="field_of_study" 
+                    class="form-input" 
+                    placeholder="e.g., Computer Science, Mathematics, Biology"
+                    required
+                    minlength="2"
+                    maxlength="100"
+                >
+                <small class="form-help">Enter the student's field of study</small>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-submit">
+                    ✓ Add Student
+                </button>
+                <a href="{{ url_for('students') }}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+
+            <p class="form-note">* All fields are required</p>
+        </form>
+    </div>
+</div>
+{% endblock %}

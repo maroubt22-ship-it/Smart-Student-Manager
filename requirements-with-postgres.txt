@@ -1,0 +1,36 @@
+# Smart Student Manager - Python Dependencies
+# Flask Web Framework and Required Libraries
+
+# Core Flask Framework
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Flask Dependencies (automatically installed)
+Jinja2>=3.1.2
+itsdangerous>=2.1.2
+click>=8.1.3
+blinker>=1.6.2
+MarkupSafe>=2.1.1
+
+# Database Drivers (supports both SQLite and PostgreSQL)
+# SQLite is built-in with Python, these are for PostgreSQL
+psycopg2-binary==2.9.9          # PostgreSQL driver (uncomment if using PostgreSQL)
+SQLAlchemy==2.0.23              # ORM (optional, for complex queries)
+
+# Environment Variables Management
+python-dotenv==1.0.0            # Load from .env files
+
+# Production WSGI Server (optional, uncomment for production)
+# gunicorn==20.1.0               # Production WSGI server
+# gevent==23.9.1                 # Async worker for gunicorn
+
+# Utilities
+colorama>=0.4.6                 # Colored terminal output
+requests>=2.31.0                # HTTP library (optional)
+
+# Development/Testing (optional, uncomment for development)
+# pytest==7.4.3                  # Testing framework
+# pytest-cov==4.1.0              # Coverage for pytest
+# black==23.11.0                 # Code formatter
+# flake8==6.1.0                  # Code linter
+# werkzeug-shell==0.1.0          # Flask shell enhancements
