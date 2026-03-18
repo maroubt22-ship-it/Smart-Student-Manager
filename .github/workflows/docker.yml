@@ -21,10 +21,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Build image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/smart-student-manager:latest .
+        run: docker build -t taoufiqm/smart-student-manager:latest .
       
       - name: Push image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/smart-student-manager:latest
+        run: docker push taoufiqm/smart-student-manager:latest
       
       - name: ✅ Succès - Image poussée vers Docker Hub
-        run: echo "🎉 Image ${{ secrets.DOCKER_USERNAME }}/smart-student-manager:latest publiée avec succès!"
+        run: echo "🎉 Image taoufiqm/smart-student-manager:latest publiée avec succès!"
